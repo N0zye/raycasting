@@ -6,3 +6,5 @@
 #include <raylib.h>
 
 void mainLoop();
+
+float D2R(float degAngle);

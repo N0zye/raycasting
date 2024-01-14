@@ -1,6 +1,6 @@
 #pragma once
 
-#include "map.h"
+#include "raycasting.h"
 #include <chrono>
 #include <cmath>
 #include <raylib.h>
@@ -13,6 +13,10 @@ public:
     ~Player();
     void draw();
     void update();
+    float getAngle();
+    float getPosX();
+    float getPosY();
+    Image getMapImage();
 
 private:
     float posX, posY;
