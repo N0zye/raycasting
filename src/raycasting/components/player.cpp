@@ -23,8 +23,8 @@ void Player::draw()
 {
     DrawCircle((int)posX, (int)posY, 2, RED);
     DrawLine((int)posX, (int)posY, (int)anglePos().x, (int)anglePos().y, RED);
-    DrawText(std::to_string((int)angle).c_str(), 900, 100, 20, BLACK);
-    DrawFPS(900, 140);
+    /*DrawText(std::to_string((int)angle).c_str(), 900, 100, 20, BLACK);
+    DrawFPS(900, 140);*/
 }
 
 void Player::update()
@@ -76,6 +76,7 @@ float Player::getPosY()
 {
     return posY;
 }
+
 Image Player::getMapImage()
 {
     return fullSizeMap;
@@ -84,28 +85,28 @@ void Player::limitMovment(float deltaX, float deltaY)
 {
     // Checking for a wall on the left
     Color pixel = GetImageColor(fullSizeMap, (int)posX - 2, (int)posY);
-    if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
+    if (pixel.r != 255 && pixel.g != 255 && pixel.b != 255) {
         if (deltaX < 0) { // Getting closer to the wall
             posX -= deltaX;
         }
     }
     // Checking for a wall on the right
     pixel = GetImageColor(fullSizeMap, (int)posX + 2, (int)posY);
-    if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
+    if (pixel.r != 255 && pixel.g != 255 && pixel.b != 255) {
         if (deltaX > 0) { // Getting closer to the wall
             posX -= deltaX;
         }
     }
     // Checking for a wall above the player
     pixel = GetImageColor(fullSizeMap, (int)posX, (int)posY - 2);
-    if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
+    if (pixel.r != 255 && pixel.g != 255 && pixel.b != 255) {
         if (deltaY < 0) { // Getting closer to the wall
             posY -= deltaY;
         }
     }
     // Checking for a wall under the player
     pixel = GetImageColor(fullSizeMap, (int)posX, (int)posY + 2);
-    if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
+    if (pixel.r != 255 && pixel.g != 255 && pixel.b != 255) {
         if (deltaY > 0) { // Getting closer to the wall
             posY -= deltaY;
         }

@@ -35,9 +35,9 @@ void Map::draw()
         for (int j = 0; j < image.height; j++) {
             Color pixel = GetImageColor(image, i, j);
 
-            // Check for black pixel (wall)
-            if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0) {
-                DrawRectangle(i * widthProportion, j * heightProportion, widthProportion, heightProportion, BLACK);
+            // Check for non-ground pixel (!= 255)
+            if (pixel.r != 255 && pixel.g != 255 && pixel.b != 255) {
+                DrawRectangle(i * widthProportion, j * heightProportion, widthProportion, heightProportion, pixel);
             }
         }
     }

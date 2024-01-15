@@ -1,5 +1,4 @@
 #include "raycasting.h"
-
 void errorLoop(const std::exception&);
 void castRays(Player* player, float FOV);
 
@@ -24,9 +23,9 @@ void mainLoop()
         // Drawing game objects
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawRectangle(GetScreenWidth() / 2, 0, GetScreenWidth() / 2, GetScreenHeight() / 2, BLUE);
-        DrawRectangle(GetScreenWidth() / 2, GetScreenHeight() / 2, GetScreenWidth() / 2, GetScreenHeight() / 2, BROWN);
-        castRays(player, 45);
+        DrawRectangle(GetScreenWidth() / 2, 0, GetScreenWidth() / 2, GetScreenHeight() / 2, SKYBLUE);
+        DrawRectangle(GetScreenWidth() / 2, GetScreenHeight() / 2, GetScreenWidth() / 2, GetScreenHeight() / 2, DARKBROWN);
+        castRays(player, 35);
         map->draw();
         player->draw();
         EndDrawing();
@@ -37,36 +36,58 @@ void castRays(Player* player, float FOV)
 {
     float x0 = player->getPosX(), y0 = player->getPosY();
     Image map = player->getMapImage();
-
-    for (float a = player->getAngle() - FOV / 2; a < player->getAngle() + FOV / 2; a += 0.1f) {
-        float fixedAngle = a;
+    unsigned char colorComp = 0;
+    for (float a = 0; a < FOV; a += FOV / GetScreenWidth() / 2) { // Increment to have 1 ray per pixel to draw (half screen)
+        float fixedAngle = a - player->getAngle() - FOV / 2;
         if (fixedAngle < 0) {
             fixedAngle += 360;
         }
         if (fixedAngle > 360) {
             fixedAngle -= 360;
         }
-        // Calculate the step in x and y direction for the DDA algorithm
+        // Calculate the step in x and y direction for the algorithm
         float dx = cosf(D2R(fixedAngle));
-        float dy = -sinf(D2R(fixedAngle)); // negative i don't know why, probably to fix the wrong raylib FoR
+        float dy = sinf(D2R(fixedAngle));
 
-        // Initialize variables for DDA algorithm
+        // Initialize variables for algorithm
         float x = x0;
         float y = y0;
-
-        // DDA algorithm
+        float distanceToWall = 0;
+        // Algorithm contains also the drawing
         while (x >= 0 && y >= 0 && x < map.width / 2 && y < map.height) {
 
-            // Check if the current point hits a wall (pixel is black in the map)
+            // Check if the current point hits a wall (pixel is non white in the map)
             Color pixelColor = GetImageColor(map, (int)x, int(y));
-            if (pixelColor.r == 0 && pixelColor.g == 0 && pixelColor.b == 0) {
+            if (pixelColor.r != 255 && pixelColor.g != 255 && pixelColor.b != 255) {
                 // Ray hits a wall
-                float distanceToWall = sqrt(pow((x0 - x), 2) + pow((y0 - y), 2));
-                // draw a line from player to the hit point
                 DrawLine(x0, y0, x, y, YELLOW);
+                distanceToWall = sqrt((x - x0) * (x - x0) + (y - y0) * (y - y0));
+
+                // Draw 3D projection
+                // Calculate wall height based on distance
+                // I don't know why but the height (10'000) needs to be big
+                float wallHeight = 10000 / distanceToWall;
+
+                // Calculate the top and bottom coordinates of the wall slice on the screen
+                float wallTop = (GetScreenHeight() - wallHeight) / 2;
+                float wallBottom = wallTop + wallHeight;
+
+                // Draw the wall slice
+                // The '2' int both cases indicates at witch point sould
+                // completly black out set to 1 to never do
+                // TODO: maybe create a macro for this number
+                // Tyding: after todo remove redundant comments (thx M.A.)
+                if (distanceToWall >= GetScreenHeight() / 1) {
+                    colorComp = 0;
+                } else {
+
+                    colorComp = 255 * (1 - 1 * (distanceToWall / GetScreenHeight()));
+                }
+                // Actual drawing
+                DrawLine((GetScreenWidth() / 2) * (1 + a / FOV) + 1, wallTop, (GetScreenWidth() / 2) * (1 + a / FOV) + 1, wallBottom, Color { colorComp, colorComp, colorComp, 255 });
                 break;
             }
-            // Move to the next point usinfg DDA step
+            // Step to the next point
             x += dx;
             y += dy;
         }
