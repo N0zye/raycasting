@@ -1,5 +1,11 @@
 #include "raycasting.h"
-void errorLoop(const std::exception&);
+
+constexpr auto FULL_BLACK_FRACT = 1;
+// Used in castRays(), defines the parameter used to calculate the full blackout
+// Distance (1 means full blackout at GetScreenHeight()/1)
+
+// Internal functions:
+void errorLoop(const std::exception&); // Displays the error
 void castRays(Player* player, float FOV);
 
 void mainLoop()
@@ -73,15 +79,11 @@ void castRays(Player* player, float FOV)
                 float wallBottom = wallTop + wallHeight;
 
                 // Draw the wall slice
-                // The '2' int both cases indicates at witch point sould
-                // completly black out set to 1 to never do
-                // TODO: maybe create a macro for this number
-                // Tyding: after todo remove redundant comments (thx M.A.)
-                if (distanceToWall >= GetScreenHeight() / 1) {
+                if (distanceToWall >= GetScreenHeight() / FULL_BLACK_FRACT) {
                     colorComp = 0;
                 } else {
 
-                    colorComp = 255 * (1 - 1 * (distanceToWall / GetScreenHeight()));
+                    colorComp = 255 * (1 - FULL_BLACK_FRACT * (distanceToWall / GetScreenHeight()));
                 }
                 // Actual drawing
                 DrawLine((GetScreenWidth() / 2) * (1 + a / FOV) + 1, wallTop, (GetScreenWidth() / 2) * (1 + a / FOV) + 1, wallBottom, Color { colorComp, colorComp, colorComp, 255 });

@@ -6,7 +6,7 @@
 int WinMain()
 {
     InitWindow(1024, 512, "raycasting");
-    SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
+    SetTargetFPS(60);
 
     mainLoop();
 
