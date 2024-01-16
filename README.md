@@ -12,7 +12,7 @@ This C++ project uses [raylib](https://www.raylib.com/) to load a map from a .pn
 In early first person games, raycasting was used to efficiently render a 3D world from a 2D playing field using a simple one-dimensional scan over the horizontal width of the screen.
 
 ## Precompiled Version only for windows(x64): 
-### [latest Release](https://github.com/N0zye/raycasting/releases/latest)
+### [latest Release](https://github.com/N0zye/raycasting/releases/latest) (Only for Windows(x64))
 
 alternatively you can dowload the source and compile it yourself, the project files contain the raylib file for the MSVC compiler
 
