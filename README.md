@@ -33,4 +33,4 @@ The map png file needs to be:
 alternatively you can dowload the source and compile it yourself, the project files contain the raylib file for the MSVC compiler
 
 ## Why
-Although raylib can handle full 3D rendering better than i did, this was a nice little side project to help <ins>me</ins> improve at coding.
+Although raylib can handle full 3D rendering better than what I can do, this was a nice little side project to help <ins>me</ins> improve at coding.
